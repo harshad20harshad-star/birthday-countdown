@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Birthday Countdown</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       margin: 0;
@@ -10,116 +11,68 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #f7d6dc;
+      background: linear-gradient(135deg, #667eea, #764ba2);
       font-family: Arial, sans-serif;
-    }
-    .card {
-      background: #fbeaec;
-      padding: 30px;
-      border-radius: 20px;
+      color: white;
       text-align: center;
-      width: 320px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    .box {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 25px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 400px;
     }
     h1 {
       margin-bottom: 10px;
     }
-    .name {
-      color: #e6396c;
-      font-size: 28px;
-      font-weight: bold;
-    }
-    .timer {
-      display: flex;
-      justify-content: space-between;
-      margin: 20px 0;
-    }
-    .box {
-      background: #fff;
-      padding: 10px;
-      border-radius: 10px;
-      width: 70px;
-    }
-    .num {
-      font-size: 26px;
-      font-weight: bold;
-      color: #e6396c;
-    }
-    .label {
-      font-size: 12px;
-    }
-    .btn {
-      background: #e6396c;
-      color: white;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .date {
-      margin-top: 10px;
-      font-size: 14px;
-      opacity: 0.8;
+    .time {
+      font-size: 22px;
+      margin-top: 15px;
+      letter-spacing: 1px;
     }
   </style>
 </head>
 <body>
 
-  <div class="card">
-    <h1>Counting down to</h1>
-    <div class="name">Harshad's Birthday 🎂</div>
-
-    <div class="timer">
-      <div class="box">
-        <div class="num" id="days">00</div>
-        <div class="label">Days</div>
-      </div>
-      <div class="box">
-        <div class="num" id="hours">00</div>
-        <div class="label">Hours</div>
-      </div>
-      <div class="box">
-        <div class="num" id="minutes">00</div>
-        <div class="label">Minutes</div>
-      </div>
-      <div class="box">
-        <div class="num" id="seconds">00</div>
-        <div class="label">Seconds</div>
-      </div>
-    </div>
-
-    <button class="btn">🎉 Let’s Celebrate</button>
-    <div class="date">Birthdate: 01 / 05 / 2004</div>
+  <div class="box">
+    <h1>🎂 Birthday Countdown</h1>
+    <h2>Harshad</h2>
+    <div class="time" id="countdown">Loading...</div>
   </div>
 
   <script>
-    function getNextBirthday() {
-      const now = new Date();
-      let year = now.getFullYear();
-      let birthday = new Date(`May 1, ${year} 00:00:00`);
+    // ✅ BIRTH DATE: 9 January 2004
+    const birthDate = new Date("2004-01-09");
 
-      if (now > birthday) {
-        birthday = new Date(`May 1, ${year + 1} 00:00:00`);
+    function updateCountdown() {
+      const now = new Date();
+
+      let nextBirthday = new Date(
+        now.getFullYear(),
+        birthDate.getMonth(),
+        birthDate.getDate()
+      );
+
+      if (nextBirthday < now) {
+        nextBirthday.setFullYear(now.getFullYear() + 1);
       }
-      return birthday.getTime();
+
+      const diff = nextBirthday - now;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById("countdown").innerHTML =
+        `${days} Days ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
     }
 
-    setInterval(() => {
-      const now = new Date().getTime();
-      const diff = getNextBirthday() - now;
-
-      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-      document.getElementById("days").innerText = d;
-      document.getElementById("hours").innerText = h;
-      document.getElementById("minutes").innerText = m;
-      document.getElementById("seconds").innerText = s;
-    }, 1000);
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
   </script>
 
 </body>
 </html>
+
